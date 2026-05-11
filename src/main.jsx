@@ -505,7 +505,7 @@ function App() {
     revealItems.forEach((item) => observer.observe(item));
 
     return () => observer.disconnect();
-  }, [activeCategory, path]);
+  }, [activeCategory, collectionPage, path]);
 
   const filteredProducts = useMemo(() => {
     if (activeCategory === "All") {
@@ -530,7 +530,7 @@ function App() {
     <>
       <header className="site-header">
         <a className="brand" href="/" onClick={(event) => navigateToHomeSection(event)} aria-label="Aureon Watches home">
-          <span className="brand-mark">A</span>
+          <LogoMark />
           <span>Aureon</span>
         </a>
 
@@ -734,6 +734,18 @@ function App() {
       </main>
       )}
     </>
+  );
+}
+
+function LogoMark() {
+  return (
+    <svg className="brand-logo" viewBox="0 0 56 56" aria-hidden="true" focusable="false">
+      <circle className="logo-ring" cx="28" cy="28" r="21" />
+      <circle className="logo-face" cx="28" cy="28" r="15" />
+      <path className="logo-crown" d="M43 24h5v8h-5" />
+      <path className="logo-letter" d="M19 36l9-20 9 20M23 28h10" />
+      <path className="logo-hand" d="M28 28l7-5M28 28l-4 7" />
+    </svg>
   );
 }
 

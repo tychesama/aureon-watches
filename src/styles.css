@@ -84,16 +84,46 @@ img {
   letter-spacing: 0;
 }
 
-.brand-mark {
-  display: grid;
+.brand-logo {
   width: 34px;
   height: 34px;
-  place-items: center;
-  border: 1px solid rgba(255, 253, 250, 0.5);
-  border-radius: 50%;
-  color: #1a1712;
-  background: #fffdfa;
-  font-weight: 700;
+  flex: 0 0 auto;
+  overflow: visible;
+}
+
+.logo-ring {
+  fill: rgba(255, 253, 250, 0.96);
+  stroke: rgba(255, 253, 250, 0.48);
+  stroke-width: 1.4;
+}
+
+.logo-face {
+  fill: #171716;
+  stroke: #cda963;
+  stroke-width: 1.4;
+}
+
+.logo-crown,
+.logo-letter,
+.logo-hand {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.logo-crown {
+  stroke: #fffdfa;
+  stroke-width: 2;
+}
+
+.logo-letter {
+  stroke: #fffdfa;
+  stroke-width: 2.4;
+}
+
+.logo-hand {
+  stroke: #cda963;
+  stroke-width: 1.7;
 }
 
 .nav {
@@ -413,11 +443,6 @@ h3 {
   height: 100%;
   object-fit: cover;
   object-position: center;
-  transition: transform 500ms ease;
-}
-
-.product-card:hover .product-media img {
-  transform: scale(1.035);
 }
 
 .product-card:hover {
