@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   ArrowLeft,
@@ -16,6 +16,8 @@ import {
   Waves,
   X,
 } from "lucide-react";
+import journalCareImage from "./assets/journal-care-service.png";
+import journalAppointmentsImage from "./assets/journal-private-appointments.png";
 import "./styles.css";
 
 const imageModules = import.meta.glob("../Watch/*.png", {
@@ -709,14 +711,34 @@ function App() {
               </div>
             </article>
             <article className="journal-card reveal" data-reveal style={{ "--delay": "90ms" }}>
-              <CalendarDays size={22} />
-              <h3>Private appointments</h3>
-              <p>Reserve a 30-minute fitting for bracelet sizing, dial comparison, and model selection.</p>
+              <img
+                className="journal-card-media"
+                src={journalAppointmentsImage}
+                alt="Guests dressed for a private Aureon studio appointment"
+                loading="lazy"
+              />
+              <div className="journal-card-body">
+                <div className="journal-card-title">
+                  <CalendarDays size={22} />
+                  <h3>Private appointments</h3>
+                </div>
+                <p>Reserve a 30-minute fitting for bracelet sizing, dial comparison, and model selection.</p>
+              </div>
             </article>
-            <article className="journal-card reveal" data-reveal style={{ "--delay": "160ms" }}>
-              <Sparkles size={22} />
-              <h3>Care service</h3>
-              <p>Annual bracelet cleaning and timing checks keep the watch ready for daily wear.</p>
+            <article className="journal-card journal-card-care reveal" data-reveal style={{ "--delay": "160ms" }}>
+              <img
+                className="journal-card-media"
+                src={journalCareImage}
+                alt="Clients outdoors after an Aureon care service appointment"
+                loading="lazy"
+              />
+              <div className="journal-card-body">
+                <div className="journal-card-title">
+                  <Sparkles size={22} />
+                  <h3>Care service</h3>
+                </div>
+                <p>Annual bracelet cleaning and timing checks keep the watch ready for daily wear.</p>
+              </div>
             </article>
           </div>
         </section>
@@ -727,7 +749,7 @@ function App() {
             <h2 id="visit-title">Aureon Studio</h2>
             <p>View the collection, compare bracelet fits, and reserve upcoming references as new imagery is added.</p>
           </div>
-          <a className="button button-primary" href="mailto:studio@aureon.example">
+          <a className="button button-primary" href="https://portfolio.joemidpan.com" target="_blank" rel="noreferrer">
             Contact studio <ArrowRight size={18} />
           </a>
         </section>
@@ -750,22 +772,44 @@ function LogoMark() {
 }
 
 function ProductPage({ product, relatedProducts, onBack, onProductClick }) {
+  const [notice, setNotice] = useState("");
+  const noticeTimeoutRef = useRef(null);
+
+  const showNotice = (message) => {
+    setNotice(message);
+    window.clearTimeout(noticeTimeoutRef.current);
+    noticeTimeoutRef.current = window.setTimeout(() => setNotice(""), 2600);
+  };
+
+  useEffect(() => () => window.clearTimeout(noticeTimeoutRef.current), []);
+
   return (
     <main className="product-page" id="top">
       <section className="detail-hero">
         <div className="detail-copy reveal is-visible">
-          <a className="back-link" href="/collection" onClick={onBack}>
-            <ArrowLeft size={18} />
-            Collection
-          </a>
-          <span className="section-kicker">{product.line}</span>
+          <div className="detail-meta-row">
+            <a className="back-link" href="/collection" onClick={onBack}>
+              <ArrowLeft size={18} />
+              Collection
+            </a>
+            <span className="section-kicker">{product.line}</span>
+          </div>
           <h1>{product.name}</h1>
           <p>{product.description}</p>
+          <strong className="detail-price">{product.price}</strong>
           <div className="detail-actions">
-            <a className="button button-primary" href="mailto:studio@aureon.example">
+            <button
+              className="button button-primary"
+              type="button"
+              onClick={() => showNotice(`Reservation request saved for ${product.name}.`)}
+            >
               Reserve this watch <ArrowRight size={18} />
-            </a>
-            <button className="button detail-button" type="button">
+            </button>
+            <button
+              className="button detail-button"
+              type="button"
+              onClick={() => showNotice(`${product.name} added to bag.`)}
+            >
               <ShoppingBag size={18} />
               Add to bag
             </button>
@@ -776,6 +820,10 @@ function ProductPage({ product, relatedProducts, onBack, onProductClick }) {
           <img src={product.image} alt={`${product.name} watch`} />
         </div>
       </section>
+
+      <div className={notice ? "ui-notice ui-notice-visible" : "ui-notice"} role="status" aria-live="polite">
+        {notice}
+      </div>
 
       <section className="detail-specs reveal" data-reveal aria-label={`${product.name} specifications`}>
         <div>
